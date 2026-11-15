@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ALANKARA | Admin Vault & Control Panel</title>
+  <meta name="description" content="Admin Control Panel for ALANKARA: Manage orders, verify UPI payments, add designs, control inventory, customize storefront, and download sales reports.">
+  
+  <!-- Font Awesome 6 Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body class="admin-body">
+
+  <!-- AUTHENTICATION GATE MODAL (Access strictly via Username and Password) -->
+  <div class="auth-overlay" id="authOverlay">
+    <div class="auth-card">
+      <div class="auth-brand">
+        <i class="fas fa-gem" style="color: var(--admin-gold);"></i> ALANKARA
+      </div>
+      <div class="auth-subtitle">Vault & Store Administration</div>
+
+      <div class="auth-error-alert" id="authErrorAlert"></div>
+
+      <form id="adminLoginForm">
+        <div class="form-group" style="text-align: left; margin-bottom: 1.25rem;">
+          <label class="form-label">Admin Username</label>
+          <div style="position: relative;">
+            <input type="text" class="form-input" id="adminUsernameInput" value="admin" required placeholder="Enter admin username" style="padding-left: 2.2rem;">
+            <i class="fas fa-user" style="position: absolute; left: 0.85rem; top: 50%; transform: translateY(-50%); color: var(--admin-gold);"></i>
+          </div>
+        </div>
+
+        <div class="form-group" style="text-align: left; margin-bottom: 1.5rem;">
+          <label class="form-label">Password</label>
+          <div style="position: relative;">
+            <input type="password" class="form-input" id="adminPasswordInput" value="admin123" required placeholder="Enter admin password" style="padding-left: 2.2rem;">
+            <i class="fas fa-key" style="position: absolute; left: 0.85rem; top: 50%; transform: translateY(-50%); color: var(--admin-gold);"></i>
+          </div>
+        </div>
+
+        <button type="submit" class="auth-btn-submit">
+          <i class="fas fa-sign-in-alt"></i> Authenticate & Enter Vault
+        </button>
+      </form>
+
+      <div class="auth-demo-hint">
+        <strong>Default Credentials:</strong><br>
+        Username: <code style="color: #8A6208;">admin</code> | Password: <code style="color: #8A6208;">admin123</code>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADMIN SIDEBAR (SLIDE-IN DRAWER ON MOBILE) -->
+  <aside class="admin-sidebar" id="adminSidebar">
+    <div class="sidebar-brand">
+      <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+        <div>
+          <div class="sidebar-logo">
+            <i class="fas fa-gem"></i> <span>ALANKARA</span>
+          </div>
+          <div class="sidebar-tagline">Vault Management System</div>
+        </div>
+        <!-- Mobile Close Button (X) -->
+        <button type="button" class="sidebar-close-btn" onclick="AlankaraAdmin.toggleSidebar(false)" title="Close Navigation Menu">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+    </div>
+
+    <ul class="sidebar-menu">
+      <div class="menu-category-title">Operations</div>
+      <li>
+        <a href="#dashboard" class="active" data-tab="dashboard">
+          <i class="fas fa-tachometer-alt"></i> <span>Dashboard</span>
+        </a>
+      </li>
+      <li>
+        <a href="#orders" data-tab="orders">
+          <i class="fas fa-receipt"></i> <span>Orders & UPI Verification</span>
+        </a>
+      </li>
+      <li>
+        <a href="#inventory" data-tab="inventory">
+          <i class="fas fa-boxes"></i> <span>Inventory Control</span>
+        </a>
+      </li>
+
+      <div class="menu-category-title">Catalog & Store</div>
+      <li>
+        <a href="#products" data-tab="products">
+          <i class="fas fa-gem"></i> <span>Jewellery & Designs</span>
+        </a>
+      </li>
+      <li>
+        <a href="#categories" data-tab="categories">
+          <i class="fas fa-tags"></i> <span>Category Manager</span>
+        </a>
+      </li>
+      <li>
+        <a href="#customize" data-tab="customize">
+          <i class="fas fa-sliders-h"></i> <span>Website Customization</span>
+        </a>
+      </li>
+      <li>
+        <a href="#reports" data-tab="reports">
+          <i class="fas fa-file-invoice-dollar"></i> <span>Reports & Downloads</span>
+        </a>
+      </li>
+    </ul>
+
+    <div class="sidebar-footer">
+      <div class="admin-user-info" onclick="AlankaraAdmin.openPasswordModal()" style="cursor: pointer;" title="Click to Change Admin Password">
+        <div class="user-avatar">A</div>
+        <div>
+          <div class="user-name">Vault Admin</div>
+          <div class="user-role" style="color: var(--admin-gold);"><i class="fas fa-key"></i> Change Password</div>
+        </div>
+      </div>
+      <button class="btn-logout" onclick="AlankaraAdmin.logout()" title="Logout from Vault">
+        <i class="fas fa-power-off"></i>
+      </button>
+    </div>
+  </aside>
+
+  <!-- Admin Sidebar Backdrop Overlay for Mobile -->
+  <div class="admin-sidebar-backdrop" id="adminSidebarBackdrop" onclick="AlankaraAdmin.toggleSidebar(false)"></div>
+
+  <!-- MAIN ADMIN AREA -->
+  <main class="admin-main">
+    <!-- Top Bar with Mobile Menu Toggle & Password Quick Action -->
+    <header class="admin-topbar">
+      <div class="admin-page-title" style="display: flex; align-items: center; gap: 0.65rem;">
+        <!-- Mobile Menu Toggle Button (Slides sidebar on mobile) -->
+        <button type="button" class="mobile-admin-toggle-btn" onclick="AlankaraAdmin.toggleSidebar()" title="Open Admin Menu">
+          <i class="fas fa-bars"></i>
+        </button>
+        <h2 id="adminPageTitle"><i class="fas fa-tachometer-alt"></i> Executive Dashboard</h2>
+      </div>
+
+      <div class="admin-topbar-actions">
+        <!-- Change Password Quick Button in Top Bar -->
+        <button type="button" class="btn-action-sm btn-view-action" onclick="AlankaraAdmin.openPasswordModal()" title="Change Admin Panel Password" style="background: rgba(212, 175, 55, 0.15); color: #8A6208; border: 1.5px solid rgba(212, 175, 55, 0.45); font-weight: 700; padding: 0.45rem 0.85rem; border-radius: 6px; display: inline-flex; align-items: center; gap: 0.4rem; cursor: pointer;">
+          <i class="fas fa-key" style="color: #AA771C;"></i> <span class="hide-mobile-text">Change Password</span>
+        </button>
+
+        <a href="index.html" target="_blank" class="btn-website-link">
+          <i class="fas fa-external-link-alt"></i> <span class="hide-mobile-text">View Store</span>
+        </a>
+        <button class="btn-admin-cta" onclick="AlankaraAdmin.openProductModal()">
+          <i class="fas fa-plus-circle"></i> <span>Add Design</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- CONTENT PANELS -->
+    <div class="admin-content-area">
+
+      <!-- PANEL 1: DASHBOARD -->
+      <section class="admin-tab-panel active" id="panel-dashboard">
+        <!-- KPI Metrics Grid -->
+        <div class="metrics-grid">
+          <div class="metric-card">
+            <div class="metric-info">
+              <h6>Verified Sales</h6>
+              <div class="metric-value" id="dashMetricRevenue">₹0</div>
+              <div class="metric-sub"><i class="fas fa-check-circle"></i> Reconciled via UPI</div>
+            </div>
+            <div class="metric-icon"><i class="fas fa-coins"></i></div>
+          </div>
+
+          <div class="metric-card amber">
+            <div class="metric-info">
+              <h6>Payment Verifications</h6>
+              <div class="metric-value" id="dashMetricPending">0</div>
+              <div class="metric-sub" style="color: #E65100;"><i class="fas fa-clock"></i> Awaiting UTR match</div>
+            </div>
+            <div class="metric-icon" style="color: #E65100; background: #FFF3E0;"><i class="fas fa-hourglass-half"></i></div>
+          </div>
+
+          <div class="metric-card blue">
+            <div class="metric-info">
+              <h6>Total Orders Placed</h6>
+              <div class="metric-value" id="dashMetricOrders">0</div>
+              <div class="metric-sub" style="color: #1565C0;"><i class="fas fa-shopping-cart"></i> All channels</div>
+            </div>
+            <div class="metric-icon" style="color: #1565C0; background: #E3F2FD;"><i class="fas fa-box"></i></div>
+          </div>
+
+          <div class="metric-card emerald">
+            <div class="metric-info">
+              <h6>Low Stock Alert</h6>
+              <div class="metric-value" id="dashMetricLowStock">0 items</div>
+              <div class="metric-sub" style="color: var(--admin-ruby);"><i class="fas fa-exclamation-triangle"></i> <= 3 in vault</div>
+            </div>
+            <div class="metric-icon" style="color: var(--admin-ruby); background: #FFEBEE;"><i class="fas fa-bell"></i></div>
+          </div>
+        </div>
+
+        <!-- Recent Orders Card -->
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <h3><i class="fas fa-receipt" style="color: var(--admin-gold);"></i> Recent Customer Orders</h3>
+            <div class="action-tools-row">
+              <button class="btn-download-csv" onclick="AlankaraAdmin.downloadOrdersCSV()">
+                <i class="fas fa-file-excel"></i> Export Sales CSV
+              </button>
+              <button class="btn-action-sm btn-edit-action" onclick="AlankaraAdmin.switchTab('orders')">
+                View All Orders <i class="fas fa-arrow-right"></i>
+              </button>
+            </div>
+          </div>
+          <div class="admin-card-body" style="padding: 0;">
+            <div class="table-responsive">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th>Order ID</th>
+                    <th>Customer Details</th>
+                    <th>Payable Total</th>
+                    <th>UPI Reference (UTR)</th>
+                    <th>Payment Status</th>
+                    <th>Quick Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="dashRecentOrdersTable">
+                  <!-- Populated by admin.js -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PANEL 2: ORDERS & UPI PAYMENT VERIFICATION ("order", "conform the payments, from customer") -->
+      <section class="admin-tab-panel" id="panel-orders">
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <h3><i class="fas fa-receipt" style="color: var(--admin-gold);"></i> Orders & UPI Reconciliation</h3>
+            <div class="action-tools-row">
+              <select class="form-select" id="adminOrderFilterSelect" style="width: auto; padding: 0.45rem 1rem;">
+                <option value="all">All Orders</option>
+                <option value="pending">Pending Payment Verification</option>
+                <option value="verified">Verified / Confirmed Payments</option>
+                <option value="shipped">Dispatched / Shipped</option>
+                <option value="delivered">Delivered</option>
+              </select>
+              <button class="btn-download-csv" onclick="AlankaraAdmin.downloadOrdersCSV()">
+                <i class="fas fa-download"></i> Download Orders Report (CSV)
+              </button>
+            </div>
+          </div>
+
+          <div class="admin-card-body" style="padding: 0;">
+            <div class="table-responsive">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th>Order & Date</th>
+                    <th>Customer & WhatsApp</th>
+                    <th>Items</th>
+                    <th>Amount</th>
+                    <th>UTR / GPay Ref</th>
+                    <th>Payment Status</th>
+                    <th>Order Status</th>
+                    <th>Vault Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="ordersTableBody">
+                  <!-- Populated by admin.js -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PANEL 3: JEWELLERY DESIGNS & CATALOG ("add designs") -->
+      <section class="admin-tab-panel" id="panel-products">
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <h3><i class="fas fa-gem" style="color: var(--admin-gold);"></i> Jewellery Catalog & Designs</h3>
+            <div class="action-tools-row">
+              <button class="btn-admin-cta" onclick="AlankaraAdmin.openProductModal()">
+                <i class="fas fa-plus"></i> Add New Design
+              </button>
+              <button class="btn-download-csv" onclick="AlankaraAdmin.downloadInventoryCSV()">
+                <i class="fas fa-file-csv"></i> Download Catalog (CSV)
+              </button>
+            </div>
+          </div>
+
+          <div class="admin-card-body" style="padding: 0;">
+            <div class="table-responsive">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th>Design</th>
+                    <th>Title & ID</th>
+                    <th>Category & Festival</th>
+                    <th>Purity & Weight</th>
+                    <th>Price / Offer</th>
+                    <th>Stock</th>
+                    <th>Badges</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="productsTableBody">
+                  <!-- Populated by admin.js -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PANEL: CATEGORY MANAGER -->
+      <section class="admin-tab-panel" id="panel-categories">
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <h3><i class="fas fa-tags" style="color:var(--admin-gold);"></i> Category Manager</h3>
+            <button class="btn-admin-cta" onclick="AlankaraAdmin.openAddCategoryModal()">
+              <i class="fas fa-plus"></i> Add New Category
+            </button>
+          </div>
+          <p style="color:#888;font-size:0.85rem;margin-bottom:1.25rem;">
+            Add, rename, or remove jewellery categories. Changes reflect immediately on the storefront.
+          </p>
+          <div id="categoriesManagerList" style="display:flex;flex-direction:column;gap:0.6rem;">
+            <!-- Rendered by admin.js -->
+          </div>
+        </div>
+      </section>
+
+      <!-- PANEL 4: INVENTORY MANAGEMENT ("inventory management") -->
+      <section class="admin-tab-panel" id="panel-inventory">
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <h3><i class="fas fa-boxes" style="color: var(--admin-gold);"></i> Vault Stock & Inventory</h3>
+            <div class="action-tools-row">
+              <button class="btn-download-csv" onclick="AlankaraAdmin.downloadInventoryCSV()">
+                <i class="fas fa-file-download"></i> Download Valuation Report (CSV)
+              </button>
+            </div>
+          </div>
+
+          <div class="admin-card-body" style="padding: 0;">
+            <div class="table-responsive">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th>Jewellery Design</th>
+                    <th>Purity Standard</th>
+                    <th>Gross Weight</th>
+                    <th>Vault Units Available</th>
+                    <th>Inventory Status</th>
+                    <th>Quick Stock Adjustment</th>
+                  </tr>
+                </thead>
+                <tbody id="inventoryTableBody">
+                  <!-- Populated by admin.js -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PANEL 5: CUSTOMIZE THE WEBSITE ("customize the website") -->
+      <section class="admin-tab-panel" id="panel-customize">
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <h3><i class="fas fa-sliders-h" style="color: var(--admin-gold);"></i> Website Settings & Live Metal Rates</h3>
+            <button class="btn-admin-cta" onclick="AlankaraAdmin.saveCustomization()">
+              <i class="fas fa-save"></i> Save All Customizations
+            </button>
+          </div>
+
+          <div class="admin-card-body">
+            <!-- 1. Live Gold & Silver Rates -->
+            <h4 style="font-family: var(--admin-font-serif); font-size: 1.15rem; margin-bottom: 1rem; color: #120B08;">
+              <i class="fas fa-coins" style="color: var(--admin-gold);"></i> Today's Live Metal Rates Ticker (₹ / Gram)
+            </h4>
+            <div class="form-grid" style="margin-bottom: 2rem;">
+              <div class="form-group">
+                <label class="form-label">22K Gold Rate (₹ / g) *</label>
+                <input type="number" class="form-input" id="settGold22" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label">24K Gold Rate (₹ / g) *</label>
+                <input type="number" class="form-input" id="settGold24" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label">925 Silver Rate (₹ / g) *</label>
+                <input type="number" class="form-input" id="settSilver" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Storefront Announcement Ticker</label>
+                <input type="text" class="form-input" id="settAnnouncement">
+              </div>
+            </div>
+
+            <!-- 2. UPI & WhatsApp Payment Settings -->
+            <h4 style="font-family: var(--admin-font-serif); font-size: 1.15rem; margin-bottom: 1rem; color: #120B08;">
+              <i class="fas fa-qrcode" style="color: var(--admin-gold);"></i> UPI (GPay) & WhatsApp Business Configuration
+            </h4>
+            <div class="form-grid" style="margin-bottom: 2rem;">
+              <div class="form-group">
+                <label class="form-label">Merchant UPI ID (GPay ID) *</label>
+                <input type="text" class="form-input" id="settUpiId" placeholder="e.g. alankara@okaxis" required>
+                <small style="color: #666; font-size: 0.75rem;">Customers scan this UPI QR or copy this ID for payment.</small>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Merchant Display Name</label>
+                <input type="text" class="form-input" id="settMerchantName" placeholder="ALANKARA JEWELLERS">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Support WhatsApp Business Number (Digits Only) *</label>
+                <input type="text" class="form-input" id="settWhatsapp" placeholder="919446814687" required>
+                <small style="color: #666; font-size: 0.75rem;">Orders & payment confirmation receipts are delivered here via WhatsApp.</small>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Boutique Phone Number</label>
+                <input type="text" class="form-input" id="settPhone" placeholder="+91 94468 14687">
+              </div>
+            </div>
+
+            <!-- 3. Festive Banner & Promo Customizer -->
+            <h4 style="font-family: var(--admin-font-serif); font-size: 1.15rem; margin-bottom: 1rem; color: #120B08;">
+              <i class="fas fa-sparkles" style="color: var(--admin-gold);"></i> Festive Mahotsav Banner & Offers
+            </h4>
+            <div class="form-grid" style="margin-bottom: 2rem;">
+              <div class="form-group">
+                <label class="form-label">Festive Banner Headline</label>
+                <input type="text" class="form-input" id="settBannerTitle">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Festive Promo Code</label>
+                <input type="text" class="form-input" id="settBannerCode" style="text-transform: uppercase;">
+              </div>
+              <div class="form-group full-width">
+                <label class="form-label">Banner Subtitle / Description</label>
+                <input type="text" class="form-input" id="settBannerSub">
+              </div>
+            </div>
+
+            <!-- 4. General Boutique Info -->
+            <h4 style="font-family: var(--admin-font-serif); font-size: 1.15rem; margin-bottom: 1rem; color: #120B08;">
+              <i class="fas fa-store" style="color: var(--admin-gold);"></i> Boutique Branding & Security
+            </h4>
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label">Store Brand Name</label>
+                <input type="text" class="form-input" id="settStoreName">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Brand Tagline</label>
+                <input type="text" class="form-input" id="settStoreTagline">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Customer Support Email</label>
+                <input type="email" class="form-input" id="settEmail">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Change Admin Password (Optional)</label>
+                <input type="password" class="form-input" id="settNewPassword" placeholder="Enter new password">
+              </div>
+              <div class="form-group full-width">
+                <label class="form-label">Store Flagship Address</label>
+                <input type="text" class="form-input" id="settAddress">
+              </div>
+            </div>
+
+            <div style="margin-top: 1.75rem;">
+              <button class="btn-admin-cta" onclick="AlankaraAdmin.saveCustomization()">
+                <i class="fas fa-save"></i> Save All Customizations
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PANEL 6: REPORTS & DOWNLOADS ("take report (downloaded format)") -->
+      <section class="admin-tab-panel" id="panel-reports">
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <h3><i class="fas fa-file-invoice-dollar" style="color: var(--admin-gold);"></i> Vault Reports & Data Exports</h3>
+          </div>
+
+          <div class="admin-card-body">
+            <div class="metrics-grid" style="margin-bottom: 2rem;">
+              <div class="metric-card emerald">
+                <div class="metric-info">
+                  <h6>Reconciled Sales</h6>
+                  <div class="metric-value" id="reportTotalSales">₹0</div>
+                </div>
+                <div class="metric-icon"><i class="fas fa-rupee-sign"></i></div>
+              </div>
+              <div class="metric-card blue">
+                <div class="metric-info">
+                  <h6>Total Orders Count</h6>
+                  <div class="metric-value" id="reportTotalOrders">0</div>
+                </div>
+                <div class="metric-icon"><i class="fas fa-receipt"></i></div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-info">
+                  <h6>Total Vault Stock</h6>
+                  <div class="metric-value" id="reportTotalStock">0</div>
+                </div>
+                <div class="metric-icon"><i class="fas fa-boxes"></i></div>
+              </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+              <!-- Export 1 -->
+              <div style="background: #FDFBF7; border: 1.5px solid var(--admin-border); border-radius: 12px; padding: 1.5rem;">
+                <h4 style="font-family: var(--admin-font-serif); font-size: 1.15rem; margin-bottom: 0.5rem;">
+                  <i class="fas fa-file-excel" style="color: #2E7D32;"></i> Complete Sales & Orders Report
+                </h4>
+                <p style="font-size: 0.85rem; color: var(--admin-text-muted); margin-bottom: 1.25rem;">
+                  Download comprehensive CSV file containing customer names, addresses, WhatsApp phones, ordered jewellery designs, UPI UTR reference codes, payment verification timestamps, and courier tracking details.
+                </p>
+                <button class="btn-download-csv" onclick="AlankaraAdmin.downloadOrdersCSV()">
+                  <i class="fas fa-download"></i> Download Sales CSV Report
+                </button>
+              </div>
+
+              <!-- Export 2 -->
+              <div style="background: #FDFBF7; border: 1.5px solid var(--admin-border); border-radius: 12px; padding: 1.5rem;">
+                <h4 style="font-family: var(--admin-font-serif); font-size: 1.15rem; margin-bottom: 0.5rem;">
+                  <i class="fas fa-gem" style="color: #1565C0;"></i> Inventory Valuation & Stock Report
+                </h4>
+                <p style="font-size: 0.85rem; color: var(--admin-text-muted); margin-bottom: 1.25rem;">
+                  Download detailed valuation report of all 22K gold, certified diamonds, and 925 silver inventory currently residing in the store vault with weights and pricing breakdown.
+                </p>
+                <button class="btn-download-csv" style="background: #1565C0;" onclick="AlankaraAdmin.downloadInventoryCSV()">
+                  <i class="fas fa-download"></i> Download Inventory CSV Report
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- MODAL: ADD / EDIT JEWELLERY DESIGN ("add designs") -->
+  <div class="modal-backdrop" id="productFormModal">
+    <div class="modal-window" style="max-width: 740px;">
+      <button class="modal-close-btn" onclick="AlankaraAdmin.closeModal('productFormModal')">
+        <i class="fas fa-times"></i>
+      </button>
+
+      <div class="modal-header">
+        <h3 id="productFormTitle"><i class="fas fa-gem" style="color: var(--admin-gold);"></i> Add New Jewellery Design</h3>
+        <p>Save design specifications, hallmark purity, gross weight, pricing, and high-res imagery</p>
+      </div>
+
+      <div class="modal-body">
+        <input type="hidden" id="prodId">
+        <div class="form-grid">
+          <div class="form-group full-width">
+            <label class="form-label">Jewellery Design Title *</label>
+            <input type="text" class="form-input" id="prodTitle" placeholder="e.g. Royal Meenakari Peacock Choker" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Jewellery Category *</label>
+            <select class="form-select" id="prodCategory">
+              <option value="terracotta">Terracotta Jewellery (Handmade Clay Art)</option>
+              <option value="antique">Antique Heritage Jewellery</option>
+              <option value="anti_tarnish">Anti-Tarnish Daily Wear</option>
+              <option value="necklaces">Necklaces & Chokers</option>
+              <option value="earrings">Earrings & Jhumkas</option>
+              <option value="bangles">Bangles & Kadas</option>
+              <option value="rings">Rings & Solitaires</option>
+              <option value="bridal">Royal Bridal Sets</option>
+              <option value="mangalsutras">Mangalsutras & Pendants</option>
+              <option value="silver">925 Silver Articles</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Special Festival Category</label>
+            <select class="form-select" id="prodFestival">
+              <option value="none">General Collection</option>
+              <option value="diwali">Diwali Lakshmi Shubh Collection</option>
+              <option value="wedding">Royal Wedding Trousseau</option>
+              <option value="akshaya">Akshaya Tritiya Sovereigns</option>
+              <option value="navratri">Navratri Kundan & Polki Glitz</option>
+              <option value="temple">Sacred Antique Temple Heirlooms</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Metal Purity / Classification *</label>
+            <select class="form-select" id="prodPurity">
+              <option value="Organic Kiln-Fired Natural Clay">Organic Kiln-Fired Natural Clay (Terracotta)</option>
+              <option value="22K Antique Gold (916)">22K Antique Gold (916 Hallmarked)</option>
+              <option value="18K PVD Gold Anti-Tarnish">18K PVD Gold Anti-Tarnish (Waterproof)</option>
+              <option value="22K Gold (916)">22K Gold (916 Hallmarked)</option>
+              <option value="18K Real Diamond (VVS-EF)">18K Real Diamond (VVS-EF)</option>
+              <option value="24K Pure Gold (999)">24K Pure Gold (999)</option>
+              <option value="925 Sterling Silver">925 Sterling Silver</option>
+              <option value="22K Gold & Uncut Polki">22K Gold & Uncut Polki</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Gross Weight (e.g. 28.50 g)</label>
+            <input type="text" class="form-input" id="prodGrossWeight" placeholder="e.g. 28.50 g">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Net Gold / Metal Weight</label>
+            <input type="text" class="form-input" id="prodNetWeight" placeholder="e.g. 27.80 g">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Regular MRP Price (₹) *</label>
+            <input type="number" class="form-input" id="prodPrice" placeholder="185000" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Festive Offer Price (₹) *</label>
+            <input type="number" class="form-input" id="prodOfferPrice" placeholder="165000" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Vault Stock Quantity *</label>
+            <input type="number" class="form-input" id="prodStock" value="5" min="0" required>
+          </div>
+
+          <div class="form-group full-width">
+            <label class="form-label">Jewellery Image URL or Upload from Computer</label>
+            <div style="display: flex; gap: 0.5rem; margin-bottom: 0.5rem;">
+              <input type="text" class="form-input" id="prodImage" placeholder="https://images.unsplash.com/photo-...">
+              <label class="btn-edit-action" style="padding: 0.65rem 1rem; cursor: pointer; border-radius: 6px; font-weight: 700; white-space: nowrap;">
+                <i class="fas fa-upload"></i> Upload Image
+                <input type="file" id="prodImageFile" accept="image/*" style="display: none;">
+              </label>
+            </div>
+            <small style="color: #777; font-size: 0.75rem;">Leave blank to automatically use ALANKARA's luxury vector artwork!</small>
+          </div>
+
+          <div class="form-group full-width">
+            <label class="form-label">Detailed Craftsmanship Description</label>
+            <textarea class="form-textarea" id="prodDescription" rows="3" placeholder="Describe motifs, gemstone quality, hallmarking, and historical inspiration..."></textarea>
+          </div>
+
+          <div class="form-group full-width">
+            <label class="form-label">Dimensions / Sizing Specifications</label>
+            <input type="text" class="form-input" id="prodDimensions" placeholder="e.g. Length: 16 inches, Width: 2 inches, Adjustable Dori">
+          </div>
+
+          <div class="form-group full-width" style="display: flex; gap: 2rem;">
+            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+              <input type="checkbox" id="prodIsFestive" checked>
+              <strong>Feature as Festive Special</strong>
+            </label>
+            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+              <input type="checkbox" id="prodIsBestseller">
+              <strong>Mark as Royal Bestseller</strong>
+            </label>
+          </div>
+        </div>
+
+        <div style="margin-top: 1.5rem; display: flex; justify-content: flex-end; gap: 1rem;">
+          <button class="btn-outline-gold" style="color: var(--admin-text-main);" onclick="AlankaraAdmin.closeModal('productFormModal')">
+            Cancel
+          </button>
+          <button class="btn-admin-cta" onclick="AlankaraAdmin.saveProductForm()">
+            <i class="fas fa-save"></i> Save Jewellery Design
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: PRINTABLE GST TAX INVOICE & RECEIPT -->
+  <div class="modal-backdrop" id="invoiceModal">
+    <div class="modal-window" style="max-width: 860px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.5rem; background: #FAF8F5; border-bottom: 1px solid var(--admin-border);" class="no-print">
+        <h4 style="font-family: var(--admin-font-serif);"><i class="fas fa-file-invoice"></i> GST Tax Invoice Preview</h4>
+        <div style="display: flex; gap: 0.75rem;">
+          <button class="btn-admin-cta" onclick="AlankaraAdmin.printA5Invoice()">
+            <i class="fas fa-print"></i> Print A5 Invoice / Save as PDF
+          </button>
+          <button class="modal-close-btn" style="position: static;" onclick="AlankaraAdmin.closeModal('invoiceModal')">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="modal-body" id="invoicePrintContainer" style="padding: 0;">
+        <!-- Populated dynamically by admin.js -->
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: ADD / EDIT CATEGORY -->
+  <div class="modal-backdrop" id="categoryModal">
+    <div class="modal-window" style="max-width:440px;">
+      <button class="modal-close-btn" onclick="AlankaraAdmin.closeModal('categoryModal')"><i class="fas fa-times"></i></button>
+      <div class="modal-header">
+        <h3><i class="fas fa-tags" style="color:var(--admin-gold);"></i> <span id="categoryModalTitle">Add New Category</span></h3>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="catEditId">
+        <div class="form-group" style="margin-bottom:1rem;">
+          <label class="form-label">Category ID (unique, no spaces e.g. <code>temple_gold</code>) *</label>
+          <input type="text" class="form-input" id="catId" placeholder="e.g. temple_gold">
+        </div>
+        <div class="form-group" style="margin-bottom:1rem;">
+          <label class="form-label">Display Name *</label>
+          <input type="text" class="form-input" id="catName" placeholder="e.g. Temple Gold Heritage">
+        </div>
+        <div class="form-group" style="margin-bottom:1.5rem;">
+          <label class="form-label">Icon (Font Awesome class)</label>
+          <input type="text" class="form-input" id="catIcon" placeholder="e.g. fas fa-om" value="fas fa-gem">
+          <small style="color:#888;">Browse icons at <a href="https://fontawesome.com/icons" target="_blank">fontawesome.com/icons</a></small>
+        </div>
+        <button class="btn-admin-cta" style="width:100%;justify-content:center;" onclick="AlankaraAdmin.saveCategoryModal()">
+          <i class="fas fa-save"></i> Save Category
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: CHANGE ADMIN VAULT PASSWORD -->
+  <div class="modal-backdrop" id="adminPasswordModal">
+    <div class="modal-window" style="max-width: 440px;">
+      <button class="modal-close-btn" onclick="AlankaraAdmin.closeModal('adminPasswordModal')" title="Close">
+        <i class="fas fa-times"></i>
+      </button>
+
+      <div class="modal-header">
+        <h3><i class="fas fa-key" style="color: var(--admin-gold);"></i> Change Admin Password</h3>
+        <p>Set a new password to protect the Alankara Admin & Vault panel</p>
+      </div>
+
+      <div class="modal-body">
+        <form onsubmit="event.preventDefault(); AlankaraAdmin.submitPasswordChange();">
+          <div class="form-group" style="margin-bottom: 1.15rem;">
+            <label class="form-label">Current Password *</label>
+            <div style="position: relative;">
+              <input type="password" class="form-input" id="pwdCurrent" placeholder="Default: admin123" required autocomplete="current-password" style="padding-right: 2.5rem;">
+              <button type="button" class="btn-toggle-pwd" onclick="AlankaraAdmin.togglePasswordVisibility('pwdCurrent', this)" title="Show/Hide Password">
+                <i class="fas fa-eye"></i>
+              </button>
+            </div>
+            <small style="color: #777; font-size: 0.75rem;">Default factory password is <code>admin123</code></small>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 1.15rem;">
+            <label class="form-label">New Password *</label>
+            <div style="position: relative;">
+              <input type="password" class="form-input" id="pwdNew" placeholder="Enter new password (min 4 characters)" minlength="4" required autocomplete="new-password" style="padding-right: 2.5rem;">
+              <button type="button" class="btn-toggle-pwd" onclick="AlankaraAdmin.togglePasswordVisibility('pwdNew', this)" title="Show/Hide Password">
+                <i class="fas fa-eye"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 1.35rem;">
+            <label class="form-label">Confirm New Password *</label>
+            <div style="position: relative;">
+              <input type="password" class="form-input" id="pwdConfirm" placeholder="Re-enter new password" minlength="4" required autocomplete="new-password" style="padding-right: 2.5rem;">
+              <button type="button" class="btn-toggle-pwd" onclick="AlankaraAdmin.togglePasswordVisibility('pwdConfirm', this)" title="Show/Hide Password">
+                <i class="fas fa-eye"></i>
+              </button>
+            </div>
+          </div>
+
+          <div id="pwdModalAlert" style="display: none; padding: 0.65rem 0.85rem; border-radius: 6px; font-size: 0.82rem; margin-bottom: 1.25rem;"></div>
+
+          <div style="display: flex; gap: 0.75rem; justify-content: flex-end;">
+            <button type="button" class="btn-outline-gold" style="color: var(--admin-text-main); padding: 0.55rem 1.25rem;" onclick="AlankaraAdmin.closeModal('adminPasswordModal')">
+              Cancel
+            </button>
+            <button type="submit" class="btn-admin-cta" style="padding: 0.55rem 1.35rem;">
+              <i class="fas fa-save"></i> Update Password
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/store-data.js"></script>
+  <script src="js/svg-jewels.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>

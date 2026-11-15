@@ -1,0 +1,891 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ALANKARA | Divine Elegance • Pure Hallmarked Jewellery & Festive Specials</title>
+  <meta name="description" content="Discover handcrafted 22K hallmarked gold jewellery, uncut polki diamonds, temple heritage chokers, and special festival collections at ALANKARA. Simply order via UPI (GPay) with instant WhatsApp confirmation.">
+  
+  <!-- Font Awesome 6 Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+  <!-- Mobile Professional Stylesheet -->
+  <link rel="stylesheet" href="css/mobile.css">
+</head>
+<body>
+
+  <!-- Top Announcement & Boutique Info Bar -->
+  <div class="top-bar">
+    <div class="container top-bar-inner">
+      <div class="top-contact-info">
+        <a href="https://wa.me/919446814687" target="_blank" style="color: var(--gold-light); font-weight: 600; display: inline-flex; align-items: center; gap: 0.4rem;">
+          <i class="fab fa-whatsapp" style="color: #25D366; font-size: 1rem;"></i> WhatsApp Orders & Enquiries: +91 94468 14687
+        </a>
+      </div>
+
+      <div class="top-announcement" id="topAnnouncementText">
+        âœ¨ Grand Festive Mahotsav: Special Terracotta & Antique Jewellery Sale! Flat 20% OFF + Free Insured Delivery! âœ¨
+      </div>
+
+      <div class="top-links">
+        <!-- Device View Mode Switcher -->
+        <div class="device-switcher-pill" id="deviceSwitcherBar">
+          <button class="switcher-btn active" id="btnViewDesktop" onclick="AlankaraStore.switchViewMode('desktop')" title="Switch to Full Desktop View">
+            <i class="fas fa-desktop"></i> Desktop View
+          </button>
+          <button class="switcher-btn" id="btnViewMobile" onclick="AlankaraStore.switchViewMode('mobile')" title="Interactive Mobile App Simulation (390px)">
+            <i class="fas fa-mobile-alt"></i> Mobile View
+          </button>
+        </div>
+
+        <a href="#tracking" onclick="AlankaraStore.openTrackingModal(); return false;">
+          <i class="fas fa-truck"></i> Track Order
+        </a>
+        <a href="admin.html" class="btn-admin-nav" title="Store Vault & Order Control Panel">
+          <i class="fas fa-lock"></i> Admin Portal
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Luxury Sticky Header -->
+  <header class="main-header">
+    <div class="container header-inner">
+      <div class="header-left-group">
+        <!-- Mobile Hamburger Toggle Button (Mobile Only) -->
+        <button class="mobile-nav-toggle-btn" onclick="AlankaraStore.toggleMobileDrawer()" title="Open Categories Menu">
+          <i class="fas fa-bars"></i>
+        </button>
+
+        <!-- Brand Logo -->
+        <a href="index.html" class="brand-identity">
+          <div class="brand-logo">
+            <i class="fas fa-gem"></i> ALANKARA
+          </div>
+          <div class="brand-tagline">Divine Elegance • Pure Hallmarked Jewellery</div>
+        </a>
+      </div>
+
+      <!-- Search Bar -->
+      <div class="header-search">
+        <div class="search-box">
+          <input type="text" id="headerSearchInput" placeholder="Search terracotta sets, antique chokers, jhumkas, bridal, 22K gold...">
+          <button class="search-btn" type="button" onclick="AlankaraStore.renderProducts()" title="Search Catalog">
+            <i class="fas fa-search"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Header Actions (Desktop View) -->
+      <div class="header-actions">
+        <!-- Order Tracking -->
+        <button class="action-btn" onclick="AlankaraStore.openTrackingModal()" title="Track Your Jewellery Delivery">
+          <i class="fas fa-map-marker-alt"></i>
+          <span>Track Order</span>
+        </button>
+
+        <!-- Quick Bag / Cart -->
+        <button class="action-btn" onclick="AlankaraStore.openCartDrawer()" title="View Jewellery Bag">
+          <i class="fas fa-shopping-bag"></i>
+          <span>Bag</span>
+          <span class="badge-count cart-badge-count">0</span>
+        </button>
+
+        <!-- Instant WhatsApp Connect -->
+        <a href="#" id="floatingWhatsAppLink" target="_blank" class="action-btn btn-whatsapp-header" title="Chat with Jewellery Vault Specialist">
+          <i class="fab fa-whatsapp"></i>
+          <span>WhatsApp Care</span>
+        </a>
+      </div>
+
+      <!-- Mobile Quick Bag Action (Mobile Only) -->
+      <button class="mobile-quick-bag-btn" onclick="AlankaraStore.openCartDrawer()" title="View Bag">
+        <i class="fas fa-shopping-bag"></i>
+        <span class="badge-count cart-badge-count">0</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Navigation Menu Bar -->
+  <nav class="nav-bar">
+    <div class="container">
+      <ul class="nav-links">
+        <li><a href="#festive" class="festive-link"><i class="fas fa-om"></i> Festive Mahotsav</a></li>
+        <li><a href="#catalog" onclick="AlankaraStore.activeCategory='all'; AlankaraStore.renderCategoryNav(); AlankaraStore.renderProducts();">All Jewellery</a></li>
+        <li><a href="#catalog" onclick="AlankaraStore.activeCategory='terracotta'; AlankaraStore.renderCategoryNav(); AlankaraStore.renderProducts();" style="color: #F28C4B;"><i class="fas fa-palette"></i> Terracotta Jewellery</a></li>
+        <li><a href="#catalog" onclick="AlankaraStore.activeCategory='antique'; AlankaraStore.renderCategoryNav(); AlankaraStore.renderProducts();" style="color: #E5C158;"><i class="fas fa-chess-queen"></i> Antique Jewels</a></li>
+        <li><a href="#catalog" onclick="AlankaraStore.activeCategory='anti_tarnish'; AlankaraStore.renderCategoryNav(); AlankaraStore.renderProducts();" style="color: #80D8FF;"><i class="fas fa-shield-alt"></i> Anti-Tarnish</a></li>
+        <li><a href="#catalog" onclick="AlankaraStore.activeCategory='necklaces'; AlankaraStore.renderCategoryNav(); AlankaraStore.renderProducts();">Necklaces & Chokers</a></li>
+        <li><a href="#catalog" onclick="AlankaraStore.activeCategory='earrings'; AlankaraStore.renderCategoryNav(); AlankaraStore.renderProducts();">Earrings & Jhumkas</a></li>
+        <li><a href="#catalog" onclick="AlankaraStore.activeCategory='bangles'; AlankaraStore.renderCategoryNav(); AlankaraStore.renderProducts();">Bangles & Kadas</a></li>
+        <li><a href="#catalog" onclick="AlankaraStore.activeCategory='bridal'; AlankaraStore.renderCategoryNav(); AlankaraStore.renderProducts();">Royal Bridal Sets</a></li>
+        <li><a href="#catalog" onclick="AlankaraStore.activeCategory='silver'; AlankaraStore.renderCategoryNav(); AlankaraStore.renderProducts();">925 Silver Articles</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- MOBILE STORY DISCOVERY CAROUSEL (Top of Mobile First View) -->
+  <section class="mobile-story-bar" id="mobileStoryBar" aria-label="Popular Jewellery Categories">
+    <div class="story-scroll-container">
+      <button type="button" class="story-item" onclick="AlankaraStore.activeCategory='terracotta'; AlankaraStore.renderCategoryNav(); AlankaraStore.renderProducts(); document.getElementById('catalog').scrollIntoView({behavior:'smooth'});" title="View Terracotta Jewellery">
+        <div class="story-ring story-ring-terracotta">
+          <div class="story-icon-inner" style="background: linear-gradient(135deg, #E65100, #BF360C);">
+            <i class="fas fa-palette"></i>
+          </div>
+        </div>
+        <span class="story-label">Terracotta</span>
+        <span class="story-sub-tag" style="background: #C85A17;">Handmade</span>
+      </button>
+
+      <button type="button" class="story-item" onclick="AlankaraStore.activeCategory='antique'; AlankaraStore.renderCategoryNav(); AlankaraStore.renderProducts(); document.getElementById('catalog').scrollIntoView({behavior:'smooth'});" title="View Antique Jewels">
+        <div class="story-ring story-ring-antique">
+          <div class="story-icon-inner" style="background: linear-gradient(135deg, #D4AF37, #8A6208);">
+            <i class="fas fa-chess-queen"></i>
+          </div>
+        </div>
+        <span class="story-label">Antique</span>
+        <span class="story-sub-tag" style="background: #AA8232;">22K Matte</span>
+      </button>
+
+      <button type="button" class="story-item" onclick="AlankaraStore.activeCategory='anti_tarnish'; AlankaraStore.renderCategoryNav(); AlankaraStore.renderProducts(); document.getElementById('catalog').scrollIntoView({behavior:'smooth'});" title="View Anti-Tarnish Daily Wear">
+        <div class="story-ring story-ring-antitarnish">
+          <div class="story-icon-inner" style="background: linear-gradient(135deg, #0288D1, #01579B);">
+            <i class="fas fa-shield-alt"></i>
+          </div>
+        </div>
+        <span class="story-label">Anti-Tarnish</span>
+        <span class="story-sub-tag" style="background: #0288D1;">Waterproof</span>
+      </button>
+
+      <button type="button" class="story-item" onclick="AlankaraStore.activeCategory='bridal'; AlankaraStore.renderCategoryNav(); AlankaraStore.renderProducts(); document.getElementById('catalog').scrollIntoView({behavior:'smooth'});" title="View Royal Bridal Sets">
+        <div class="story-ring story-ring-bridal">
+          <div class="story-icon-inner" style="background: linear-gradient(135deg, #B71C1C, #4A0E0E);">
+            <i class="fas fa-crown"></i>
+          </div>
+        </div>
+        <span class="story-label">Royal Bridal</span>
+        <span class="story-sub-tag" style="background: #B71C1C;">Heritage</span>
+      </button>
+
+      <button type="button" class="story-item" onclick="AlankaraStore.activeCategory='necklaces'; AlankaraStore.renderCategoryNav(); AlankaraStore.renderProducts(); document.getElementById('catalog').scrollIntoView({behavior:'smooth'});" title="View Chokers & Necklaces">
+        <div class="story-ring story-ring-gold">
+          <div class="story-icon-inner" style="background: linear-gradient(135deg, #F39C12, #B7950B);">
+            <i class="fas fa-necklace"></i>
+          </div>
+        </div>
+        <span class="story-label">Chokers</span>
+        <span class="story-sub-tag" style="background: #D4AF37; color: #120B08;">Gold 916</span>
+      </button>
+
+      <button type="button" class="story-item" onclick="AlankaraStore.activeCategory='earrings'; AlankaraStore.renderCategoryNav(); AlankaraStore.renderProducts(); document.getElementById('catalog').scrollIntoView({behavior:'smooth'});" title="View Jhumkas & Earrings">
+        <div class="story-ring story-ring-gold">
+          <div class="story-icon-inner" style="background: linear-gradient(135deg, #E67E22, #935116);">
+            <i class="fas fa-certificate"></i>
+          </div>
+        </div>
+        <span class="story-label">Jhumkas</span>
+        <span class="story-sub-tag" style="background: #AA8232;">Polki</span>
+      </button>
+
+      <button type="button" class="story-item" onclick="AlankaraStore.activeCategory='silver'; AlankaraStore.renderCategoryNav(); AlankaraStore.renderProducts(); document.getElementById('catalog').scrollIntoView({behavior:'smooth'});" title="View 925 Silver Articles">
+        <div class="story-ring story-ring-silver">
+          <div class="story-icon-inner" style="background: linear-gradient(135deg, #78909C, #37474F);">
+            <i class="fas fa-coins"></i>
+          </div>
+        </div>
+        <span class="story-label">925 Silver</span>
+        <span class="story-sub-tag" style="background: #607D8B;">Pure Puja</span>
+      </button>
+
+      <button type="button" class="story-item" onclick="document.getElementById('offersOnlyToggle').checked = true; AlankaraStore.offersOnly = true; AlankaraStore.renderProducts(); document.getElementById('catalog').scrollIntoView({behavior:'smooth'});" title="View Festive Offers">
+        <div class="story-ring story-ring-offer">
+          <div class="story-icon-inner" style="background: linear-gradient(135deg, #FF1744, #C51162);">
+            <i class="fas fa-bolt"></i>
+          </div>
+        </div>
+        <span class="story-label" style="color: #FF5252; font-weight: 700;">Offers 20%</span>
+        <span class="story-sub-tag" style="background: #FF1744;">Save Big</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- Hero Festive Grand Showcase -->
+  <section class="hero-section" id="hero">
+    <!-- Animated Twinkling Luxury Sparkles -->
+    <div class="hero-sparkles-wrap" aria-hidden="true">
+      <span class="sparkle-star s1">âœ¦</span>
+      <span class="sparkle-star s2">âœ§</span>
+      <span class="sparkle-star s3">â‹†</span>
+      <span class="sparkle-star s4">âœ¦</span>
+      <span class="sparkle-star s5">âœ§</span>
+      <span class="sparkle-star s6">â˜…</span>
+    </div>
+
+    <div class="container hero-grid">
+      <div class="hero-text-content">
+        <div class="hero-badge">
+          <i class="fas fa-sparkles"></i> <span id="heroBannerCode">ALANKARA20</span> • Festive Exclusive
+        </div>
+        <h1 class="hero-title" id="heroBannerTitle">
+          Diwali & Wedding Mahotsav 2026
+        </h1>
+        <p class="hero-subtitle" id="heroBannerSub">
+          Grace your divine moments with handcrafted 22K pure hallmarked gold heirlooms, antique temple sets, and certified uncut polki solitaires.
+        </p>
+
+        <div class="hero-offer-box">
+          <div class="offer-box-content">
+            <div class="offer-label"><i class="fas fa-gift" style="color: var(--primary-gold);"></i> Instant Festive Offer:</div>
+            <strong style="color: var(--primary-gold); font-size: 1.15rem;">Flat 20% OFF on Making Charges</strong>
+          </div>
+          <div class="offer-code-pill" onclick="navigator.clipboard.writeText('ALANKARA20'); AlankaraStore.showToast('Promo Code ALANKARA20 Copied!', 'success');" title="Click to copy code">
+            <i class="fas fa-tag"></i> USE CODE: <span>ALANKARA20</span> <i class="fas fa-copy" style="font-size: 0.75rem; margin-left: 0.25rem;"></i>
+          </div>
+        </div>
+
+        <div class="hero-cta-group">
+          <a href="#catalog" class="btn-primary btn-hero-cta">
+            <i class="fas fa-gem"></i> Explore Vault Collection
+          </a>
+          <button class="btn-outline-gold" onclick="AlankaraStore.openTrackingModal()">
+            <i class="fas fa-truck"></i> Track an Order
+          </button>
+        </div>
+      </div>
+
+      <!-- Hero Visual Card with Live Badges & Quick Action Row -->
+      <div class="hero-visual-card">
+        <div class="hero-card-top-badges">
+          <span class="live-pill"><span class="live-pulse-dot"></span> Festive Best Seller</span>
+          <span class="discount-pill"><i class="fas fa-bolt"></i> Flat 20% OFF</span>
+        </div>
+
+        <img src="https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=1200&q=80" 
+             alt="Alankara Royal Heritage Gold Choker"
+             onerror="this.onerror=null; this.src=JewelVisuals.getFallbackImage('bridal', 'Padmavati Royal Choker', '22K Gold (916)');">
+        
+        <div class="hero-tag-overlay">
+          <div>
+            <div class="tag-title">Padmavati Royal Choker</div>
+            <div class="tag-sub">Handcrafted 22K Yellow Gold • BIS 916 Certified</div>
+          </div>
+          <div class="hero-card-cta-row">
+            <button class="btn-primary btn-simply-order-hero" onclick="AlankaraStore.startSingleCheckout('AL-NK-101')" title="Instant UPI Checkout">
+              <i class="fas fa-bolt"></i> Simply Order
+            </button>
+            <a href="https://wa.me/919446814687?text=Namaste%20ALANKARA!%20I%20would%20like%20to%20order%20Padmavati%20Royal%20Choker." target="_blank" class="btn-hero-card-whatsapp" title="Chat with Jeweller on WhatsApp">
+              <i class="fab fa-whatsapp"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Trust Badges Strip (Visible on Mobile & Desktop) -->
+    <div class="hero-quick-trust-strip">
+      <div class="container hero-trust-flex">
+        <div class="hero-trust-item">
+          <i class="fas fa-certificate"></i>
+          <span>100% BIS 916 Hallmarked Pure Gold</span>
+        </div>
+        <div class="hero-trust-item">
+          <i class="fas fa-bolt"></i>
+          <span>Instant Google Pay / UPI QR Checkout</span>
+        </div>
+        <div class="hero-trust-item">
+          <i class="fab fa-whatsapp" style="color: #25D366;"></i>
+          <span>Direct WhatsApp Order Confirmation</span>
+        </div>
+        <div class="hero-trust-item">
+          <i class="fas fa-shield-alt"></i>
+          <span>100% Insured Tamper-Evident Delivery</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Trust & Authenticity Pillars -->
+  <section class="trust-strip">
+    <div class="container trust-grid">
+      <div class="trust-item">
+        <div class="trust-icon"><i class="fas fa-award"></i></div>
+        <div class="trust-text">
+          <h4>100% BIS 916 Hallmarked</h4>
+          <p>Every gram certified for purity with government hallmarking emblem</p>
+        </div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon"><i class="fas fa-qrcode"></i></div>
+        <div class="trust-text">
+          <h4>Simple UPI (GPay) Checkout</h4>
+          <p>Scan & pay instantly with WhatsApp receipt verification</p>
+        </div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon"><i class="fas fa-shield-alt"></i></div>
+        <div class="trust-text">
+          <h4>Insured Vault Transit</h4>
+          <p>100% secure tamper-evident packaging with live parcel tracking</p>
+        </div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon"><i class="fas fa-hand-holding-usd"></i></div>
+        <div class="trust-text">
+          <h4>Guaranteed Lifetime Buyback</h4>
+          <p>Transparent exchange & purity valuation at all times</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Festive Special Collections Section -->
+  <section class="section-festive" id="festive">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag"><i class="fas fa-sparkles"></i> Auspicious Celebrations</span>
+        <h2 class="section-title">Special Festival Collections</h2>
+        <p class="section-desc">Handcrafted jewels curated specifically for sacred muhurats, Diwali Lakshmi Puja, Akshaya Tritiya, and royal wedding ceremonies.</p>
+      </div>
+
+      <!-- Festive Filter Pills Row -->
+      <div class="festive-pills-row" id="festivePillsContainer">
+        <!-- Rendered dynamically by app.js -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Mobile Offer Strip (shows below hero on mobile only) -->
+  <div class="mobile-offer-strip" id="mobileOfferStrip">
+    <span class="mobile-offer-code" onclick="navigator.clipboard.writeText('ALANKARA20'); AlankaraStore.showToast('Code ALANKARA20 Copied!','success');">
+      <i class="fas fa-tag"></i> FLAT 20% OFF — Use Code: <strong>ALANKARA20</strong> <i class="fas fa-copy" style="font-size:0.65rem;opacity:0.7;"></i>
+    </span>
+    <a href="https://wa.me/919446814687" target="_blank" class="mobile-offer-wa">
+      <i class="fab fa-whatsapp"></i> Chat
+    </a>
+  </div>
+
+  <!-- Main Jewellery Catalog Section -->
+  <section class="section-catalog" id="catalog">
+    <div class="container">
+      <!-- Catalog Filter Controls Bar -->
+      <div class="catalog-filter-bar">
+        <!-- Category Tab Buttons -->
+        <div class="category-tabs" id="categoryTabsContainer">
+          <!-- Rendered dynamically by app.js -->
+        </div>
+
+        <!-- Filter & Sorting Controls -->
+        <div class="filter-sort-controls">
+          <!-- Purity & Type Selector -->
+          <select class="sort-select" id="puritySelect">
+            <option value="all">All Purity & Media</option>
+            <option value="Terracotta">Terracotta Clay Art</option>
+            <option value="Antique">Antique Heritage Gold (916)</option>
+            <option value="Anti-Tarnish">Anti-Tarnish Daily Wear</option>
+            <option value="22K">22K Gold (916)</option>
+            <option value="Diamond">Real Certified Diamond</option>
+            <option value="925">925 Sterling Silver</option>
+          </select>
+
+          <!-- Sorting Selector -->
+          <select class="sort-select" id="sortSelect">
+            <option value="featured">Featured Heirlooms</option>
+            <option value="price-asc">Price: Low to High</option>
+            <option value="price-desc">Price: High to Low</option>
+            <option value="discount">Highest Discount</option>
+          </select>
+
+          <!-- Offers Only Checkbox -->
+          <label style="display: flex; align-items: center; gap: 0.4rem; font-size: 0.85rem; font-weight: 700; cursor: pointer; color: var(--color-ruby);">
+            <input type="checkbox" id="offersOnlyToggle">
+            <span>Special Offers Only</span>
+          </label>
+
+          <!-- Badge Count -->
+          <span style="font-size: 0.85rem; font-weight: 700; color: #8A6208;" id="productsCountBadge">12 Exquisite Designs</span>
+        </div>
+      </div>
+
+      <!-- Products Grid -->
+      <div class="products-grid" id="productsGrid">
+        <!-- Products populated dynamically by app.js -->
+      </div>
+    </div>
+  </section>
+
+  <!-- MODAL: Product Quick View & Detailed Specifications -->
+  <div class="modal-backdrop" id="productDetailModal">
+    <div class="modal-window" style="max-width: 780px;">
+      <button class="modal-close-btn" onclick="AlankaraStore.closeModal('productDetailModal')">
+        <i class="fas fa-times"></i>
+      </button>
+      <div class="modal-body" id="productDetailContent">
+        <!-- Injected via app.js -->
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: SIMPLY ORDER & UPI (GPAY) PAYMENT FLOW WITH WHATSAPP CONFIRMATION -->
+  <div class="modal-backdrop" id="checkoutModal">
+    <div class="modal-window">
+      <button class="modal-close-btn" onclick="AlankaraStore.closeModal('checkoutModal')">
+        <i class="fas fa-times"></i>
+      </button>
+
+      <div class="modal-header">
+        <h3><i class="fas fa-bolt" style="color: var(--primary-gold);"></i> Simply Order Jewellery</h3>
+        <p>Direct fast checkout with UPI (Google Pay) & Instant WhatsApp Receipt Confirmation</p>
+      </div>
+
+      <div class="modal-body">
+        <!-- Step Indicator -->
+        <div class="checkout-steps">
+          <div class="step-indicator active" id="stepIndicator1">
+            <div class="step-num">1</div>
+            <span>Delivery Info</span>
+          </div>
+          <div class="step-indicator" id="stepIndicator2">
+            <div class="step-num">2</div>
+            <span>UPI (GPay) Payment</span>
+          </div>
+          <div class="step-indicator" id="stepIndicator3">
+            <div class="step-num">3</div>
+            <span>Confirmed</span>
+          </div>
+        </div>
+
+        <!-- Step 1: Customer Details Form -->
+        <div class="checkout-step-pane" id="checkoutStep1">
+          <!-- Order Summary Item Breakdown -->
+          <div class="order-summary-box" id="checkoutSummaryContent">
+            <!-- Populated dynamically -->
+          </div>
+
+          <!-- Promo Code Box -->
+          <div style="display: flex; gap: 0.5rem; margin-bottom: 1.25rem;">
+            <input type="text" class="form-input" id="promoCodeInput" placeholder="Enter Promo Code (e.g. ALANKARA20)" style="text-transform: uppercase;">
+            <button class="btn-primary" style="padding: 0.65rem 1.25rem; font-size: 0.85rem;" type="button" onclick="AlankaraStore.applyPromoCode()">
+              Apply
+            </button>
+          </div>
+          <div id="promoCodeMsg" style="font-size: 0.8rem; font-weight: 600; margin-top: -0.75rem; margin-bottom: 1.25rem;"></div>
+
+          <h4 style="font-family: var(--font-serif); font-size: 1.1rem; margin-bottom: 0.75rem;">
+            <i class="fas fa-map-marker-alt" style="color: var(--primary-gold);"></i> Delivery & Contact Details
+          </h4>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label">Full Name *</label>
+              <input type="text" class="form-input" id="custName" placeholder="e.g. Priya Sharma" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">WhatsApp Mobile Number *</label>
+              <input type="tel" class="form-input" id="custPhone" placeholder="e.g. 9446814687 (for WhatsApp confirmation)" required>
+            </div>
+            <div class="form-group full-width">
+              <label class="form-label">Delivery Street Address *</label>
+              <input type="text" class="form-input" id="custAddress" placeholder="Flat No, Building, Road, Landmark" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">City / Town *</label>
+              <input type="text" class="form-input" id="custCity" placeholder="e.g. Bengaluru" value="Bengaluru" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Postal Pincode *</label>
+              <input type="text" class="form-input" id="custPincode" placeholder="e.g. 560001" required>
+            </div>
+            <div class="form-group full-width">
+              <label class="form-label">Email Address (Optional for e-invoice)</label>
+              <input type="email" class="form-input" id="custEmail" placeholder="e.g. priya@example.com">
+            </div>
+          </div>
+
+          <div style="margin-top: 1.5rem;">
+            <button class="btn-primary" style="width: 100%; justify-content: center; font-size: 1rem;" onclick="AlankaraStore.proceedToPayment()">
+              Proceed to UPI (GPay) Payment <i class="fas fa-arrow-right"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Step 2: UPI (Google Pay) Payment Screen -->
+        <div class="checkout-step-pane" id="checkoutStep2" style="display: none;">
+          <div class="upi-payment-box">
+            <div class="upi-header-logo">
+              <span class="gpay-badge" style="background: linear-gradient(135deg, #004C97, #0070CC);">&#127968; HDFC Bank UPI</span>
+              <span>• UPI Payment Gateway</span>
+            </div>
+            
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.5rem;">
+              Pay securely to Verified Merchant: <strong id="merchantNameDisplay">ALANKARA JEWELLERS</strong>
+            </p>
+
+            <div style="font-size: 1.85rem; font-weight: 900; color: var(--text-dark); margin: 0.5rem 0;" id="upiPayableAmount">
+              ₹0
+            </div>
+
+            <!-- Real Scannable UPI QR Code -->
+            <div class="qr-canvas-wrap">
+              <div id="upiQrCode" style="display:inline-block; padding:8px; background:#fff; border-radius:8px; border:2px solid #D4AF37;"></div>
+            </div>
+            
+            <p style="font-size: 0.8rem; color: #666; margin-bottom: 0.75rem;">
+              Scan using <strong>PhonePe</strong>, Paytm, Google Pay, or any UPI app
+            </p>
+
+            <!-- UPI ID Copy Bar -->
+            <div class="upi-id-copy-row">
+              <span id="upiIdDisplay">maheshmaakgardens@okhdfcbank</span>
+              <button class="btn-copy-upi" onclick="AlankaraStore.copyUpiId()">
+                <i class="fas fa-copy"></i> Copy
+              </button>
+            </div>
+
+            <!-- Deep Link for Mobile Devices -->
+            <a href="#" id="gpayDeepLinkBtn" class="btn-gpay-deeplink" style="background: linear-gradient(135deg, #1a73e8, #0d47a1);">
+              <i class="fas fa-mobile-alt" style="font-size: 1.2rem;"></i> Tap to Pay via Any UPI App
+            </a>
+
+            <!-- Step to verify / enter UTR -->
+            <div style="background: #FDFBF7; border: 1px solid rgba(212,175,55,0.4); border-radius: 8px; padding: 1rem; margin: 1.25rem 0; text-align: left;">
+              <label class="form-label" style="font-size: 0.8rem;">
+                <i class="fas fa-receipt" style="color: var(--primary-gold);"></i> 
+                Enter 12-Digit UPI Reference Number (UTR)
+              </label>
+              <input type="text" class="form-input" id="upiUtrInput" placeholder="e.g. 431872910482 (from your UPI app payment details)" style="font-family: monospace; font-size: 1rem; letter-spacing: 1px;">
+              <small style="color: #777; font-size: 0.75rem; display: block; margin-top: 0.25rem;">
+                * Or simply take a screenshot of your GPay payment and send it via WhatsApp below.
+              </small>
+            </div>
+
+            <!-- WhatsApp Confirmation Trigger -->
+            <button class="btn-whatsapp-confirm" onclick="AlankaraStore.confirmOrderOnWhatsApp()">
+              <i class="fab fa-whatsapp" style="font-size: 1.4rem;"></i>
+              Confirm Payment & Send Slip on WhatsApp
+            </button>
+          </div>
+        </div>
+
+        <!-- Step 3: Order Confirmation Screen -->
+        <div class="checkout-step-pane" id="checkoutStep3" style="display: none;">
+          <div id="confirmationDetails">
+            <!-- Injected via app.js -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: ORDER TRACKING ("track the product") -->
+  <div class="modal-backdrop" id="trackingModal">
+    <div class="modal-window">
+      <button class="modal-close-btn" onclick="AlankaraStore.closeModal('trackingModal')">
+        <i class="fas fa-times"></i>
+      </button>
+
+      <div class="modal-header">
+        <h3><i class="fas fa-truck" style="color: var(--primary-gold);"></i> Track Your Jewellery Parcel</h3>
+        <p>Enter your unique Alankara Order ID (from WhatsApp or receipt) to inspect transit progress</p>
+      </div>
+
+      <div class="modal-body">
+        <div class="track-search-box">
+          <input type="text" class="form-input" id="trackOrderIdInput" placeholder="Enter Order ID (e.g. AL-9842, AL-9841)" style="font-family: monospace; font-weight: 700; text-transform: uppercase;">
+          <button class="btn-primary" style="padding: 0.65rem 1.5rem;" onclick="AlankaraStore.performOrderTrack()">
+            <i class="fas fa-search"></i> Track
+          </button>
+        </div>
+
+        <div id="trackingResultBox">
+          <div style="background: #FAF8F5; border: 1px dashed rgba(212,175,55,0.4); padding: 2rem; border-radius: 8px; text-align: center; color: var(--text-muted);">
+            <i class="fas fa-box-open" style="font-size: 2.5rem; color: #D4AF37; margin-bottom: 0.75rem;"></i>
+            <p>Enter your <strong>Order ID</strong> above to view real-time UPI payment reconciliation, vault hallmarking, and insured courier tracking status.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CART SLIDE-OUT DRAWER -->
+  <div class="cart-drawer" id="cartDrawer">
+    <div class="cart-drawer-header">
+      <h3><i class="fas fa-shopping-bag"></i> Your Jewellery Bag</h3>
+      <button style="background: none; border: none; color: #FFF; font-size: 1.25rem;" onclick="AlankaraStore.closeCartDrawer()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
+    <div class="cart-drawer-body" id="cartDrawerItems">
+      <!-- Injected via app.js -->
+    </div>
+
+    <div class="cart-drawer-footer">
+      <div style="display: flex; justify-content: space-between; font-weight: 800; font-size: 1.15rem; margin-bottom: 1rem;">
+        <span>Bag Total:</span>
+        <span id="cartDrawerTotal">₹0</span>
+      </div>
+      <button class="btn-primary" style="width: 100%; justify-content: center; font-size: 1rem;" onclick="AlankaraStore.startCartCheckout()">
+        <i class="fas fa-bolt"></i> Simply Order Bag via UPI GPay
+      </button>
+    </div>
+  </div>
+  <div class="modal-backdrop" id="cartDrawerBackdrop" onclick="AlankaraStore.closeCartDrawer()"></div>
+
+  <!-- Floating WhatsApp Chat Widget -->
+  <div class="floating-whatsapp">
+    <div class="whatsapp-pulse-msg">
+      âœ¨ Have a question? Chat with our Vault Jeweller!
+    </div>
+    <a href="#" id="floatingWhatsAppWidgetLink" target="_blank" class="whatsapp-bubble-btn" title="Chat on WhatsApp">
+      <i class="fab fa-whatsapp"></i>
+    </a>
+  </div>
+
+  <!-- MOBILE SIDE DRAWER NAVIGATION PANEL -->
+  <aside class="mobile-nav-drawer" id="mobileNavDrawer">
+    <div class="mobile-drawer-header">
+      <div>
+        <div class="mobile-drawer-brand">
+          <i class="fas fa-gem" style="color: var(--primary-gold);"></i> ALANKARA
+        </div>
+        <div class="mobile-drawer-sub">Divine Heritage Jewellery</div>
+      </div>
+      <button class="mobile-drawer-close" onclick="AlankaraStore.closeMobileDrawer()" title="Close Drawer">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
+    <div class="mobile-drawer-body">
+      <!-- Quick User Action Pills -->
+      <div class="drawer-action-pills">
+        <button class="drawer-pill-btn" onclick="AlankaraStore.closeMobileDrawer(); AlankaraStore.openCartDrawer();">
+          <i class="fas fa-shopping-bag" style="color: var(--primary-gold);"></i> Bag (<span class="cart-badge-count">0</span>)
+        </button>
+        <button class="drawer-pill-btn" onclick="AlankaraStore.closeMobileDrawer(); AlankaraStore.openTrackingModal();">
+          <i class="fas fa-truck" style="color: var(--primary-gold);"></i> Track Parcel
+        </button>
+      </div>
+
+      <!-- Section: Featured Collections -->
+      <div class="drawer-section-title">Special Collections</div>
+      <ul class="drawer-nav-list">
+        <li>
+          <a href="#catalog" onclick="AlankaraStore.closeMobileDrawer(); AlankaraStore.activeCategory='terracotta'; AlankaraStore.renderCategoryNav(); AlankaraStore.renderProducts();">
+            <span class="drawer-nav-icon" style="color: #F28C4B;"><i class="fas fa-palette"></i></span>
+            <span>Terracotta Jewellery</span>
+            <span class="drawer-tag" style="background: #C85A17;">Handmade Clay</span>
+          </a>
+        </li>
+        <li>
+          <a href="#catalog" onclick="AlankaraStore.closeMobileDrawer(); AlankaraStore.activeCategory='antique'; AlankaraStore.renderCategoryNav(); AlankaraStore.renderProducts();">
+            <span class="drawer-nav-icon" style="color: #E5C158;"><i class="fas fa-chess-queen"></i></span>
+            <span>Antique Heritage Jewels</span>
+            <span class="drawer-tag" style="background: #AA8232;">22K Matte</span>
+          </a>
+        </li>
+        <li>
+          <a href="#catalog" onclick="AlankaraStore.closeMobileDrawer(); AlankaraStore.activeCategory='anti_tarnish'; AlankaraStore.renderCategoryNav(); AlankaraStore.renderProducts();">
+            <span class="drawer-nav-icon" style="color: #80D8FF;"><i class="fas fa-shield-alt"></i></span>
+            <span>Anti-Tarnish Daily Wear</span>
+            <span class="drawer-tag" style="background: #0288D1;">Waterproof</span>
+          </a>
+        </li>
+        <li>
+          <a href="#festive" onclick="AlankaraStore.closeMobileDrawer();">
+            <span class="drawer-nav-icon" style="color: #FFA726;"><i class="fas fa-om"></i></span>
+            <span>Festive Mahotsav 2026</span>
+            <span class="drawer-tag" style="background: #B71C1C;">Special Offer</span>
+          </a>
+        </li>
+      </ul>
+
+      <!-- Section: Vault Categories -->
+      <div class="drawer-section-title">Jewellery Categories</div>
+      <ul class="drawer-nav-list">
+        <li>
+          <a href="#catalog" onclick="AlankaraStore.closeMobileDrawer(); AlankaraStore.activeCategory='all'; AlankaraStore.renderCategoryNav(); AlankaraStore.renderProducts();">
+            <span class="drawer-nav-icon"><i class="fas fa-gem"></i></span>
+            <span>All Jewellery Designs</span>
+          </a>
+        </li>
+        <li>
+          <a href="#catalog" onclick="AlankaraStore.closeMobileDrawer(); AlankaraStore.activeCategory='necklaces'; AlankaraStore.renderCategoryNav(); AlankaraStore.renderProducts();">
+            <span class="drawer-nav-icon"><i class="fas fa-necklace"></i></span>
+            <span>Necklaces & Chokers</span>
+          </a>
+        </li>
+        <li>
+          <a href="#catalog" onclick="AlankaraStore.closeMobileDrawer(); AlankaraStore.activeCategory='earrings'; AlankaraStore.renderCategoryNav(); AlankaraStore.renderProducts();">
+            <span class="drawer-nav-icon"><i class="fas fa-certificate"></i></span>
+            <span>Earrings & Jhumkas</span>
+          </a>
+        </li>
+        <li>
+          <a href="#catalog" onclick="AlankaraStore.closeMobileDrawer(); AlankaraStore.activeCategory='bangles'; AlankaraStore.renderCategoryNav(); AlankaraStore.renderProducts();">
+            <span class="drawer-nav-icon"><i class="fas fa-circle-notch"></i></span>
+            <span>Bangles & Kadas</span>
+          </a>
+        </li>
+        <li>
+          <a href="#catalog" onclick="AlankaraStore.closeMobileDrawer(); AlankaraStore.activeCategory='rings'; AlankaraStore.renderCategoryNav(); AlankaraStore.renderProducts();">
+            <span class="drawer-nav-icon"><i class="fas fa-ring"></i></span>
+            <span>Rings & Solitaires</span>
+          </a>
+        </li>
+        <li>
+          <a href="#catalog" onclick="AlankaraStore.closeMobileDrawer(); AlankaraStore.activeCategory='bridal'; AlankaraStore.renderCategoryNav(); AlankaraStore.renderProducts();">
+            <span class="drawer-nav-icon"><i class="fas fa-crown"></i></span>
+            <span>Royal Bridal Sets</span>
+          </a>
+        </li>
+        <li>
+          <a href="#catalog" onclick="AlankaraStore.closeMobileDrawer(); AlankaraStore.activeCategory='silver'; AlankaraStore.renderCategoryNav(); AlankaraStore.renderProducts();">
+            <span class="drawer-nav-icon"><i class="fas fa-coins"></i></span>
+            <span>925 Silver Articles</span>
+          </a>
+        </li>
+      </ul>
+
+      <!-- Section: Direct Contact & Helpline -->
+      <div class="drawer-section-title">Boutique Assistance</div>
+      <div class="drawer-contact-box">
+        <a href="https://wa.me/919446814687?text=Namaste%20ALANKARA!%20I%20would%20like%20to%20order%20jewellery." target="_blank" class="btn-drawer-whatsapp">
+          <i class="fab fa-whatsapp"></i> WhatsApp: +91 94468 14687
+        </a>
+        <a href="tel:+919446814687" class="btn-drawer-call">
+          <i class="fas fa-phone-alt"></i> Call: +91 94468 14687
+        </a>
+        <a href="admin.html" class="btn-drawer-admin">
+          <i class="fas fa-lock"></i> Staff & Admin Vault Access
+        </a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Mobile Drawer Backdrop Overlay -->
+  <div class="mobile-nav-backdrop" id="mobileNavBackdrop" onclick="AlankaraStore.closeMobileDrawer()"></div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Luxury Footer -->
+  <footer class="main-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <!-- Col 1: Brand Info -->
+        <div class="footer-col">
+          <div class="brand-logo" style="margin-bottom: 0.75rem;">
+            <i class="fas fa-gem"></i> ALANKARA
+          </div>
+          <p>
+            Alankara is dedicated to preserving the regal splendor of Indian jewellery heritage. Handcrafted by master artisans with BIS 916 hallmarked purity and ethical sourcing.
+          </p>
+          <div class="hallmark-cert-row">
+            <span class="cert-badge"><i class="fas fa-certificate"></i> BIS 916 Hallmarked</span>
+            <span class="cert-badge"><i class="fas fa-shield-alt"></i> IGI Certified</span>
+          </div>
+        </div>
+
+        <!-- Col 2: Quick Links -->
+        <div class="footer-col">
+          <h4>Jewellery Collections</h4>
+          <ul>
+            <li><a href="#festive">Festive Mahotsav Specials</a></li>
+            <li><a href="#catalog" onclick="AlankaraStore.activeCategory='terracotta'; AlankaraStore.renderCategoryNav(); AlankaraStore.renderProducts();">Handmade Terracotta Jewellery</a></li>
+            <li><a href="#catalog" onclick="AlankaraStore.activeCategory='antique'; AlankaraStore.renderCategoryNav(); AlankaraStore.renderProducts();">Antique Temple Jewels</a></li>
+            <li><a href="#catalog" onclick="AlankaraStore.activeCategory='anti_tarnish'; AlankaraStore.renderCategoryNav(); AlankaraStore.renderProducts();">Anti-Tarnish Daily Wear</a></li>
+            <li><a href="#catalog">Bridal & Heritage Necklaces</a></li>
+            <li><a href="#catalog">Meenakari & Kundan Jhumkas</a></li>
+            <li><a href="#catalog">925 Sterling Silver Puja Articles</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 3: Customer Care & Tracking -->
+        <div class="footer-col">
+          <h4>Customer Care</h4>
+          <ul>
+            <li><a href="#tracking" onclick="AlankaraStore.openTrackingModal(); return false;"><i class="fas fa-truck"></i> Track Order Status</a></li>
+            <li><a href="#" onclick="AlankaraStore.openTrackingModal('AL-9842'); return false;"><i class="fas fa-receipt"></i> Sample Order Tracking (AL-9842)</a></li>
+            <li><a href="https://wa.me/919446814687" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp Care: +91 94468 14687</a></li>
+            <li><a href="admin.html"><i class="fas fa-lock"></i> Admin Vault Login</a></li>
+            <li><a href="#catalog">Payment Guide: UPI (Google Pay)</a></li>
+            <li><a href="#catalog">Lifetime Buyback Policy</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 4: Contact & Flagship Address -->
+        <div class="footer-col">
+          <h4>Flagship Boutique</h4>
+          <p>
+            <i class="fas fa-map-marker-alt" style="color: var(--primary-gold);"></i> 
+            Alankara Heritage Vault, 45 Jewellers Street, Commercial Zone, MG Road, Bengaluru - 560001
+          </p>
+          <p>
+            <i class="fas fa-phone-alt" style="color: var(--primary-gold);"></i> <a href="tel:+919446814687">+91 94468 14687</a>
+          </p>
+          <p>
+            <i class="fab fa-whatsapp" style="color: #25D366;"></i> WhatsApp: <a href="https://wa.me/919446814687" target="_blank">+91 94468 14687</a>
+          </p>
+          <p>
+            <i class="fas fa-envelope" style="color: var(--primary-gold);"></i> care@alankarajewels.com
+          </p>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>
+          Â© 2026 ALANKARA JEWELLERS. All Rights Reserved. Pure BIS 916 Hallmarked Gold.
+        </div>
+        <div>
+          <span>Secure Payments Powered by <strong>Google Pay / UPI</strong></span> | 
+          <a href="admin.html">Staff & Admin Access</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- INTERACTIVE MOBILE DEVICE SIMULATOR MODAL (Phone Chassis Preview) -->
+  <div class="mobile-simulator-overlay" id="mobileSimulatorModal">
+    <div class="sim-top-controls">
+      <div style="display: flex; align-items: center; gap: 0.5rem; font-weight: 700; color: var(--gold-light);">
+        <i class="fas fa-mobile-alt"></i> ALANKARA Mobile View (390 x 844 iPhone/Android)
+      </div>
+      <div style="display: flex; gap: 0.5rem;">
+        <button class="btn-outline-gold" style="padding: 0.25rem 0.75rem; font-size: 0.75rem; border-radius: 20px;" onclick="AlankaraStore.switchViewMode('desktop')">
+          <i class="fas fa-desktop"></i> Exit to Desktop View
+        </button>
+        <button style="background: rgba(255,255,255,0.15); border: none; color: #FFF; width: 28px; height: 28px; border-radius: 50%; cursor: pointer;" onclick="AlankaraStore.switchViewMode('desktop')">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Phone Chassis Frame -->
+    <div class="phone-mockup-frame">
+      <div class="phone-island-notch"></div>
+      <iframe id="mobileSimIframe" src="" title="ALANKARA Mobile Viewport"></iframe>
+      <div class="phone-home-indicator"></div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/qrcode.min.js"></script>
+  <script src="js/store-data.js"></script>
+  <script src="js/svg-jewels.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    // Ensure floating widget link uses store WhatsApp number
+    document.addEventListener('DOMContentLoaded', () => {
+      const sett = AlankaraDB.getSettings();
+      const widget = document.getElementById('floatingWhatsAppWidgetLink');
+      if (widget && sett.whatsappNumber) {
+        widget.href = `https://wa.me/${sett.whatsappNumber}?text=${encodeURIComponent('Namaste ALANKARA! I would like to inquire about your jewellery collections and festive offers.')}`;
+      }
+    });
+  </script>
+</body>
+</html>
+
+
