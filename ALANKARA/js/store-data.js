@@ -2,6 +2,10 @@
  * ALANKARA JEWELLERY STORE - CENTRAL DATA STORE & STORAGE ENGINE
  * Handles default inventory, antique jewels, terracotta collections, orders, settings, and LocalStorage persistence.
  */
+const SUPABASE_URL = 'https://fcprlmotnmzncznigxgc.supabase.co'; // Replace with your URL
+const SUPABASE_ANON_KEY = 'sb_publishable_SwLG2xkn88bu8eKy0DWodw_yUNupSuA'; // Replace with your Anon Key
+
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 const ALANKARA_STORAGE_KEYS = {
   PRODUCTS: 'alankara_products_v2',
