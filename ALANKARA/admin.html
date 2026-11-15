@@ -791,8 +791,12 @@
       </div>
     </div>
   </div>
-<!-- Supabase JS SDK -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>  <!-- Scripts -->
+<!-- Load Supabase globally for your classic script files -->
+<script type="module">
+  import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+  window.supabase = { createClient };
+</script>  
+  <!-- Scripts -->
   <script src="js/store-data.js"></script>
   <script src="js/svg-jewels.js"></script>
   <script src="js/admin.js"></script>
