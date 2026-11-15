@@ -489,14 +489,14 @@ Vault Management Team
     }).join('');
   },
 
-  openProductModal: function(productId = null) {
+  openProductModal: async function(productId = null) {
     this.editingProductId = productId;
     const modal = document.getElementById('productFormModal');
     const titleEl = document.getElementById('productFormTitle');
     if (!modal) return;
 
     if (productId) {
-      const p = AlankaraDB.getProductById(productId);
+      const p = await AlankaraDB.getProductById(productId);
       if (!p) return;
       if (titleEl) titleEl.textContent = 'Edit Jewellery Design';
       document.getElementById('prodId').value = p.id;
@@ -536,7 +536,7 @@ Vault Management Team
     modal.classList.add('open');
   },
 
-  saveProductForm: function() {
+  saveProductForm: async function() {
     const id = document.getElementById('prodId').value.trim();
     const title = document.getElementById('prodTitle').value.trim();
     const category = document.getElementById('prodCategory').value;
@@ -586,7 +586,7 @@ Vault Management Team
       certification: purity.includes('925') ? '925 Sterling Silver' : (purity.includes('Diamond') ? 'IGI Certified Diamond' : 'BIS 916 Hallmarked Gold')
     };
 
-    let prods = AlankaraDB.getProducts();
+ let prods = await AlankaraDB.getProducts();
     if (this.editingProductId) {
       const idx = prods.findIndex(p => p.id === this.editingProductId);
       if (idx !== -1) prods[idx] = newProduct;
@@ -594,19 +594,19 @@ Vault Management Team
       prods.unshift(newProduct);
     }
 
-    AlankaraDB.saveProducts(prods);
-    this.products = prods;
+    await AlankaraDB.saveProducts(prods);
+    await this.loadData();
     this.closeModal('productFormModal');
     this.renderProducts();
     this.renderInventory();
-    this.showToast(`âœ¨ Jewellery design "${title}" saved successfully!`, 'success');
+    this.showToast(`✨ Jewellery design "${title}" saved successfully!`, 'success');
   },
 
-  deleteProduct: function(productId) {
+  deleteProduct: async function(productId) {
     if (confirm(`Are you sure you want to delete design "${productId}" from catalog?`)) {
-      let prods = AlankaraDB.getProducts().filter(p => p.id !== productId);
-      AlankaraDB.saveProducts(prods);
-      this.products = prods;
+      let prods = (await AlankaraDB.getProducts()).filter(p => p.id !== productId);
+      await AlankaraDB.saveProducts(prods);
+      await this.loadData();
       this.renderProducts();
       this.renderInventory();
       this.showToast(`Design ${productId} removed from catalog.`, 'info');
@@ -648,13 +648,13 @@ Vault Management Team
     }).join('');
   },
 
-  adjustStock: function(productId, delta) {
-    let prods = AlankaraDB.getProducts();
+adjustStock: async function(productId, delta) {
+    let prods = await AlankaraDB.getProducts();
     const p = prods.find(item => item.id === productId);
     if (p) {
       p.stock = Math.max(0, p.stock + delta);
-      AlankaraDB.saveProducts(prods);
-      this.products = prods;
+      await AlankaraDB.saveProducts(prods);
+      await this.loadData();
       this.renderInventory();
       this.showToast(`Updated stock for ${p.title}: ${p.stock} units`, 'info');
     }
