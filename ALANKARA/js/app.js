@@ -23,17 +23,16 @@ const AlankaraStore = {
   currentDiscount: 0,
   appliedPromoCode: '',
 
-  init: function() {
-    this.checkDeviceParam();
-    this.loadState();
-    this.renderTopBar();
-    this.renderCategoryNav();
-    this.renderFestivePills();
-    this.renderProducts();
-    this.bindEvents();
-    this.updateCartUI();
-  },
-
+init: async function() {
+        this.checkDeviceParam();
+        await this.loadState(); // <-- WAIT for data to arrive from Supabase
+        this.renderTopBar();
+        this.renderCategoryNav();
+        this.renderFestivePills();
+        this.renderProducts();
+        this.bindEvents();
+        this.updateCartUI();
+    },
   checkDeviceParam: function() {
     if (window.location.search.includes('device=phone')) {
       const switcher = document.getElementById('deviceSwitcherBar');
@@ -88,11 +87,11 @@ const AlankaraStore = {
     this.toggleMobileDrawer(false);
   },
 
-  loadState: function() {
-    this.settings = AlankaraDB.getSettings();
-    this.products = AlankaraDB.getProducts();
-    this.cart = AlankaraDB.getCart();
-  },
+  loadState: async function() {
+        this.settings = await AlankaraDB.getSettings();
+        this.products = await AlankaraDB.getProducts();
+        this.cart = AlankaraDB.getCart(); // Cart stays in localStorage, so no await needed here
+    },
 
   // 1. Render Announcement & Top Bar
   renderTopBar: function() {
