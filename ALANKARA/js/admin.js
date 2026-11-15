@@ -16,16 +16,16 @@ const AlankaraAdmin = {
   orderFilter: 'all',
   editingProductId: null,
 
-  init: function() {
-    this.loadData();
+ init: async function() {
+    await this.loadData();
     this.checkAuth();
     this.bindEvents();
   },
 
-  loadData: function() {
-    this.settings = AlankaraDB.getSettings();
-    this.products = AlankaraDB.getProducts();
-    this.orders = AlankaraDB.getOrders();
+loadData: async function() {
+    this.settings = await AlankaraDB.getSettings();
+    this.products = await AlankaraDB.getProducts();
+    this.orders = await AlankaraDB.getOrders();
   },
 
   // 1. AUTHENTICATION GATE ("admin can access only through the username and password")
@@ -192,27 +192,15 @@ const AlankaraAdmin = {
     this.renderCurrentView();
   },
 
-  renderCurrentView: function() {
-    this.loadData();
+ renderCurrentView: async function() {
+    await this.loadData();
     switch (this.activeTab) {
-      case 'dashboard':
-        this.renderDashboard();
-        break;
-      case 'orders':
-        this.renderOrders();
-        break;
-      case 'products':
-        this.renderProducts();
-        break;
-      case 'inventory':
-        this.renderInventory();
-        break;
-      case 'customize':
-        this.renderCustomization();
-        break;
-      case 'reports':
-        this.renderReports();
-        break;
+      case 'dashboard': this.renderDashboard(); break;
+      case 'orders': this.renderOrders(); break;
+      case 'products': this.renderProducts(); break;
+      case 'inventory': this.renderInventory(); break;
+      case 'customize': this.renderCustomization(); break;
+      case 'reports': this.renderReports(); break;
     }
   },
 
