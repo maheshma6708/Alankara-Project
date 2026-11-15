@@ -680,7 +680,7 @@ adjustStock: async function(productId, delta) {
     document.getElementById('settBannerCode').value = s.festivalBanner?.code || '';
   },
 
-  saveCustomization: function() {
+  saveCustomization: async function() {
     const updated = {
       ...this.settings,
       storeName: document.getElementById('settStoreName').value.trim(),
